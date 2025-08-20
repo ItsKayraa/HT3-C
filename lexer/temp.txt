@@ -1,0 +1,71 @@
+int lex(Token* result, char *content) {
+    int i = 0;
+    int cpos = 0;
+    while (i != strlen(content)) {
+        char curchar = content[i];
+        Token curtoken = result[cpos];
+        printf("%c", curchar);
+
+        // Skipping whitespaces
+        if (iswhitespace(curchar)) {
+            i++;
+            continue;
+        
+        // Identifier | Keyword check
+        } else if (isalpha(curchar) || curchar == '_') {
+            char tempstr[128];
+            int pos = 0;
+
+            while (isalnum(content[i]) || content[i] == '_') {
+                tempstr[pos++] = content[i++];
+            }
+            tempstr[pos] = '\0';
+
+            curtoken.text = strdup(tempstr);
+            curtoken.type = iskeyword(tempstr) ? T_KEYWORD : T_IDENT;
+
+        // Integer | Float check
+        } else if (isdigit(curchar)) {
+            char tempstr[128];
+            int pos = 0;
+
+            while (content[i] != '\0' && (isdigit(content[i]) || content[i] == '.')) {
+                tempstr[pos++] = content[i++];
+            }
+            tempstr[pos] = '\0';
+
+            curtoken.text = strdup(tempstr);
+            curtoken.type = isfloat(tempstr) ? T_FLOAT : T_INT;
+
+        } else if (curchar == '"') {
+            i++;
+            char tempstr[128] = "";
+            int pos = 0;
+            while (content[i] != '\0' && content[i] != '"') {
+                tempstr[pos] = content[i];
+                i++;
+                pos++;
+            }
+
+            curtoken.text = tempstr;
+            curtoken.type = T_STRING;
+        } else if (curchar == '\'') {
+            if (i+2 <= strlen(content) && content[i+2] == '\'') {
+                char temp[2];
+                temp[0] = curchar;
+                temp[1] = '\0';
+                curtoken.text = temp;
+                curtoken.type = T_CHAR;
+                i+=3;
+            } else {
+                return 1;
+            }
+        }
+        result[cpos] = curtoken;
+        cpos++;
+    }
+    cpos++;
+    result[cpos].text = "EOF";
+    result[cpos].type = T_EOF;
+    return 0;
+}
