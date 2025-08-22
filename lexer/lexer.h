@@ -61,7 +61,6 @@ typedef struct {
 
 bool in(const char **keywords, int len, char *target);
 
-bool iswhitespace(char ch);
 bool isfloat(const char text[]);
 
 int lex(Token* result, char *content);
