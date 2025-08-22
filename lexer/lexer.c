@@ -3,7 +3,7 @@
 #include "lexer.h"
 
 bool iskeyword(char text[]) {
-    constexpr int keyword_len = sizeof(keywords) / sizeof(char*);
+    constexpr size_t keyword_len = sizeof(keywords) / sizeof(char*);
     return strExists(text, keywords, keyword_len);
 }
 
