@@ -1,4 +1,11 @@
+//!std=c23
+
 #include "lexer.h"
+
+bool iskeyword(char text[]) {
+    constexpr int keyword_len = sizeof(keywords) / sizeof(char*);
+    return strExists(text, keywords, keyword_len);
+}
 
 int lex(Token *result, char *content) {
     int i = 0;
