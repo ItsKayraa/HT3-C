@@ -23,10 +23,6 @@ bool iskeyword(char text[]) {
     return in(keywords, keyword_len, text);
 }
 
-bool iswhitespace(char ch) {
-    return (ch == ' ' || ch == '\n' || ch == '\t' || ch == '\r');
-}
-
 bool isfloat(const char text[]) {
     int len = strlen(text);
     bool has_dot = 0;
