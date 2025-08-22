@@ -61,9 +61,9 @@ typedef struct {
     char text[256];
 } Token;
 
-int lex(Token* result, char *content);
-
-const char* keywords[] = {"func", "eret", "ret", "char"};
+const char* keywords[] = {"func", "ret", "eret", "char"};
 const char* types[] = {"int", "str"};
+
+int lex(Token* result, char *content);
 
 #endif
