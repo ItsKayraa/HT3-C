@@ -1,6 +1,7 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+#include "../utilities/utils.h"
 #include "../lexer/lexer.h"
 
 const char* registers[] = {

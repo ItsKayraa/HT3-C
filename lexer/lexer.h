@@ -7,6 +7,8 @@
 #include <ctype.h>
 #include <stdio.h>
 
+#include "../utilities/utils.h"
+
 typedef enum {
     T_COMA,
     T_SEMI,
@@ -59,14 +61,9 @@ typedef struct {
     char text[256];
 } Token;
 
-bool in(const char **keywords, int len, char *target);
-
-bool iswhitespace(char ch);
-bool isfloat(const char text[]);
+const char* keywords[] = {"func", "ret", "eret", "char"};
+const char* types[] = {"int", "str"};
 
 int lex(Token* result, char *content);
-
-const char* keywords[] = {"func", "eret", "ret", "char"};
-const char* types[] = {"int", "str"};
 
 #endif

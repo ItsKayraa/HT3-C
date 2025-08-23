@@ -1,52 +1,10 @@
+//!std=c23
+
 #include "lexer.h"
 
-/// @brief 
-/// @param keywords 
-/// @param len 
-/// @param target 
-/// @return  
-bool in(const char **keywords, int len, char *target) {
-    int i;
-    for(i = 0; i < len; i++) {
-        const char* cur = keywords[i];
-        if (strcmp(cur, target) == 0) {
-            return 1;
-        } else {
-            continue;
-        }
-    }
-    return 0;
-}
-
 bool iskeyword(char text[]) {
-    int keyword_len = sizeof(keywords) / sizeof(keywords[0]);
-    return in(keywords, keyword_len, text);
-}
-
-bool iswhitespace(char ch) {
-    return (ch == ' ' || ch == '\n' || ch == '\t' || ch == '\r');
-}
-
-bool isfloat(const char text[]) {
-    int len = strlen(text);
-    bool has_dot = 0;
-
-    if (len == 0) return 0;
-
-    if (!isdigit((unsigned char)text[0])) return 0;
-
-    for (int i = 0; i < len; i++) {
-        if (text[i] == '.') {
-            if (has_dot) {
-                return 0;
-            }
-            has_dot = 1;
-        } else if (!isdigit((unsigned char)text[i])) {
-            return 0;
-        }
-    }
-
-    return has_dot;
+    constexpr size_t keyword_len = sizeof(keywords) / sizeof(char*);
+    return strExists(text, keywords, keyword_len);
 }
 
 int lex(Token *result, char *content) {
@@ -217,7 +175,8 @@ int lex(Token *result, char *content) {
     return 0;
 }
 
-/*
+#if 0
+
 int main() {
     Token tokens[1048];
 
@@ -231,4 +190,5 @@ int main() {
     
     return 0;
 }
-*/
+
+#endif

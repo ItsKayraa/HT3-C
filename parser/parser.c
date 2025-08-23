@@ -21,7 +21,7 @@ int parser(ASM assembly, Token tokens[]) {
                     char* name = "";
                     int loc = i+2;
 
-                    if (in(types, lenf, nametoken.text)) {
+                    if (strExists(nametoken.text, types,lenf)) {
                         strcpy(typ, nametoken.text);
                         Token namet = tokens[i+2];
                         if (namet.type != T_IDENT) {
