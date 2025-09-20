@@ -52,7 +52,7 @@ char* readFile(const char *path) {
 /// ==================================== [ MAIN ] ==================================== ///
 
 int main(int argc, char* argv[]) {
-    if(argc<2) { /// if there is at least 2 arguments
+    if(argc<2) { /// if there are at least 2 arguments
 		ERR("Expected a source file.");
         return 1;
     }
@@ -65,6 +65,7 @@ int main(int argc, char* argv[]) {
     
     char* content = readFile(argv[1]);
     Token* result = lexer(content);
+	free(content); /// content is presumably never used after this, so i recommend freeing
 
     for (size_t i = 0; result[i].type != TOKEN_EOF; i++) {
         printf("TOKEN_TYPE: %d, TOKEN_VALUE: %s\n", result[i].type, result[i].value);
@@ -74,7 +75,6 @@ int main(int argc, char* argv[]) {
     parser(result);
 
     free(result);
-
     return(0);
 }
 
