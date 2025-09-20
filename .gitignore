@@ -1,1 +1,10 @@
+# Ignore Linux EXEs (they suck)
+*
+!*.*
+!*/
+
+# Ignore Bin Directory
+bin/
+
+# Ignore VSCode files
 .vscode
