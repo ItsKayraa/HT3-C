@@ -16,11 +16,9 @@
 #define TOKEN_EOF     5
 #define TOKEN_DOT     6
 #define TOKEN_SEMICOL 7
+#define TOKEN_COMMA   8
+#define TOKEN_COL     9
 #define TOKEN_DOUBLE  50
-
-const char* keywords[] = {
-    "func", "printl", "eret", "ret", "int", "str", "char"
-};
 
 typedef struct {
     int type;
