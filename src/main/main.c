@@ -9,18 +9,25 @@
 #include "../lexer/lexer.h"
 #include "../parser/parser.h"
 
+/// =================================== [ MACROS ] =================================== ///
+
+/// === colour console ================
+
 #define RED     "\033[1;31m"
-#define GREEN   "\033[1;32m"
-#define BLUE    "\033[1;34m"
-#define YELLOW  "\033[1;33m"
 #define RESET   "\033[0m"
 
-/// ==================================== [ MAIN ] ==================================== ///
+/// === print error ===================
 
+/// perrors the given message in this template: "error: <urmsg> \n", colouring "error:"
+#define ERR(msg) perror(RED "error: " RESET msg "\n")
+
+/// ==================================== [ FUNC ] ==================================== ///
+
+/// returns a pointer
 char* readFile(const char *path) {
     FILE *fp = fopen(path, "r");
-    if (!fp) {
-        perror(RED "error:" RESET " File opening failed.");
+    if(!fp) {
+		ERR("File opening failed.");
         return NULL;
     }
 
@@ -29,8 +36,8 @@ char* readFile(const char *path) {
     rewind(fp);
 
     char *buffer = malloc(size + 1);
-    if (!buffer) {
-        perror(RED "error:" RESET " Memory allocation failed.");
+    if(!buffer) {
+		ERR("Memory allocation failed.");
         fclose(fp);
         return NULL;
     }
@@ -42,26 +49,22 @@ char* readFile(const char *path) {
     return buffer;
 }
 
-// make it char* later
-Token* compile(char* code) {
-    // just lex for now
-    return(lexer(code));
-}
+/// ==================================== [ MAIN ] ==================================== ///
 
 int main(int argc, char* argv[]) {
     if(argc<2) { /// if there is at least 2 arguments
-        perror(RED "error:" RESET " expected a source file.\n");
+		ERR("Expected a source file.");
         return 1;
     }
     
     // source file: argv[1]
-    if (access(argv[1], F_OK) != 0) {
-        perror(RED "error:" RESET " source file doesn't exists.\n");
+    if(access(argv[1], F_OK) != 0) {
+		ERR("Source file doesn't exist.");
         return 1;
     }
     
     char* content = readFile(argv[1]);
-    Token* result = compile(content);
+    Token* result = lexer(content);
 
     for (size_t i = 0; result[i].type != TOKEN_EOF; i++) {
         printf("TOKEN_TYPE: %d, TOKEN_VALUE: %s\n", result[i].type, result[i].value);
