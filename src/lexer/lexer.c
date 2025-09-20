@@ -2,19 +2,39 @@
 
 #include "lexer.h"
 
-bool iswhitespace(char c) {
-    return (c==' ' || c=='\n' || c=='\t' || c=='\r');
-}
-bool isdym(char c) {
-    return(c == '&' || c == '*' || c == '+' || c == '/' || c == '-' || c == '?' || c == '|' || c == '%' || c == '=' || c == '^' || c == '!');
-} bool isym(char c) {
-    return(c == '(' || c == ')' || c == '{' || c == '}' || c == '&' || c == '*' || c == '+' || c == '/' || c == '-' || c == '?' || c == '|' || c == '%' || c == '=' || c == '^' || c == '!' || c == '[' || c == ']');
+const char* keywords[] = {
+    "func", "printl", "eret", "ret", "int", "str", "char"
+};
+
+#define iswhitespace(c) (c==' ' || c=='\n' || c=='\t' || c=='\r')
+
+#define isdym(c) ( \
+        c == '&' || c == '*' || c == '+' || c == '/'  \
+        || c == '-' || c == '?' || c == '|' || c == '%' \
+        || c == '=' || c == '^' || c == '!')
+
+#define isym(c) (c == '(' || c == ')' || c == '{' || c == '}' \
+        || c == '&' || c == '*' || c == '+' || c == '/' \
+        || c == '-' || c == '?' || c == '|' || c == '%' \
+        || c == '=' || c == '^' || c == '!' \
+        || c == '[' || c == ']' )
+
+bool in(const char **keywords, int len, char *target) {
+    int i;
+    for(i = 0; i < len; i++) {
+        const char* cur = keywords[i];
+        if (strcmp(cur, target) == 0) {
+            return 1;
+        } else {
+            continue;
+        }
+    }
+    return 0;
 }
 
-bool iskeyw(char* s) {
-    for (int i = 0; i <= sizeof(keywords); i++) {
-        if (strcmp(s, keywords[i])) return true;
-    }
+bool iskeyw(char text[]) {
+    int keyword_len = sizeof(keywords) / sizeof(keywords[0]);
+    return in(keywords, keyword_len, text);
 }
 
 Token* lexer(char* code) {
@@ -64,8 +84,14 @@ Token* lexer(char* code) {
             tempstr[idx] = '\0';  // end it
             i--;                  // dec the index
 
+            printf("%s\n", tempstr);
+
             // create the token
-            result[token_index].type = TOKEN_IDENT;
+            if (iskeyw(tempstr)) {
+                result[token_index].type = TOKEN_KEYWORD;
+            } else {
+                result[token_index].type = TOKEN_IDENT;
+            }
             result[token_index].value = tempstr;
             token_index++;
         }
@@ -114,20 +140,20 @@ Token* lexer(char* code) {
             token_index++;
         } else if (curchar == ':') {
             if (code[i+1] <= len && code[i+1] == ':') {
-                result[token_index].type = TOKEN_DOUBLE + TOKEN_DOT;
+                result[token_index].type = TOKEN_DOUBLE + TOKEN_COL;
                 result[token_index].value = malloc(3);
                 result[token_index].value[0] = ':';
                 result[token_index].value[1] = ':';
                 result[token_index].value[2] = '\0';
             } else {
-                result[token_index].type = TOKEN_DOT;
+                result[token_index].type = TOKEN_COL;
                 result[token_index].value = malloc(2);
                 result[token_index].value[0] = ':';
                 result[token_index].value[1] = '\0';
             }
             token_index++;
         } else if (curchar == ',') {
-            result[token_index].type     = TOKEN_DOT;
+            result[token_index].type     = TOKEN_COMMA;
             result[token_index].value    = malloc(2);
             result[token_index].value[0] = ',';
             result[token_index].value[1] = '\0';

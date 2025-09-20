@@ -1,4 +1,4 @@
 func main() {
-    printl();
+    printl(text123);
     eret 0;
 }

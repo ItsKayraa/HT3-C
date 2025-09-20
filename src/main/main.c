@@ -7,6 +7,7 @@
 #include <stdlib.h>
 
 #include "../lexer/lexer.h"
+#include "../parser/parser.h"
 
 #define RED     "\033[1;31m"
 #define GREEN   "\033[1;32m"
@@ -66,6 +67,8 @@ int main(int argc, char* argv[]) {
         printf("TOKEN_TYPE: %d, TOKEN_VALUE: %s\n", result[i].type, result[i].value);
         free(result[i].value);
     }
+
+    parser(result);
 
     free(result);
 
