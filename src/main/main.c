@@ -6,6 +6,8 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+/// #define TOKENNAME_DEBUG /// uncomment for token names
+
 #include "../lexer/lexer.h"
 #include "../parser/parser.h"
 
@@ -52,6 +54,8 @@ char* readFile(const char *path) {
 /// ==================================== [ MAIN ] ==================================== ///
 
 int main(int argc, char* argv[]) {
+	/// === file checks ===================
+
     if(argc<2) { /// if there are at least 2 arguments
 		ERR("Expected a source file.");
         return 1;
@@ -62,20 +66,27 @@ int main(int argc, char* argv[]) {
 		ERR("Source file doesn't exist.");
         return 1;
     }
+
+	/// === main ==========================
     
     char* content = readFile(argv[1]);
-    Token* result = lexer(content);
+    Token* tokenStream = lexer(content);
 	free(content); /// content is presumably never used after this, so i recommend freeing
 
-    for (size_t i = 0; result[i].type != TOKEN_EOF; i++) {
-        printf("TOKEN_TYPE: %d, TOKEN_VALUE: %s\n", result[i].type, result[i].value);
-        free(result[i].value);
-    }
+	for(; tokenStream->type != TOKEN_EOF; tokenStream++) {
+		printf("TOKENNAME: " TOKENNAMEFMT "; TOKENVAL: %s;\n", 
+				TOKENNAME(tokenStream->type), tokenStream->value
+		); free(tokenStream->value);
+	} printf("REACHED EOF\n");
 
-    parser(result);
+    parser(tokenStream);
 
-    free(result);
+	/// === exfiltration ==================
+
+    free(tokenStream);
     return(0);
+
+	/// ===================================
 }
 
 /// ==================================== [ NOTE ] ==================================== ///
