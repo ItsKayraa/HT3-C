@@ -8,7 +8,7 @@ int parser(Token* tokens) {
         Token curt = tokens[i];
 
         if (curt.type == TOKEN_KEYWORD) {
-            printf("keyword %s\n", curt->value);
+            printf("keyword %s\n", curt.value);
             if (strcmp(curt.value, "func") == 0) {
                 printf("function\n");
                 if (i+1 > sizeof(tokens)) return 1;
